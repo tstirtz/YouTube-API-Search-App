@@ -6,8 +6,10 @@ function getDataFromAPI(searchTerm, callback){
   //send query to API
   const settings = {
     URL: "youTube_url",
+    part: 'snippet',
+    key: 'AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg'
     data: {
-      q: `${searchTerm} in:name`,
+      q: `${searchTerm}`,
       per_page: 5
     },
     dataType: "json"
@@ -20,6 +22,7 @@ function getDataFromAPI(searchTerm, callback){
 //render results
 function renderResults(){
   //append results to HMTL
+  $('.js-results').append()
 }
 
 //display search data
@@ -31,3 +34,5 @@ function displaySearchData(){
 function watchForSubmit(){
 
 }
+
+$(getDataFromAPI);
