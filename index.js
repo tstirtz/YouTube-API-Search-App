@@ -22,9 +22,10 @@ console.log('start of getDataFromAPI working');
 function renderResults(result){
   //append results to HMTL
   $('.js-results').prepend(
-    `<iframe
-         src="${result.snippet.thumbnails.medium.url}">
-    </iframe>`);
+                          //NEED TO MAKE THE THUMBNAILS CLICKABLE TO LINK TO YOUTUBE
+    `<a href="https://www.youtube.com/watch?v=${result.id.videoId}">
+        <img src="${result.snippet.thumbnails.medium.url}">
+     </a>`);
   console.log(`${result.snippet.thumbnails.medium.url}`);
 }
 
