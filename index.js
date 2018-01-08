@@ -22,7 +22,6 @@ console.log('start of getDataFromAPI working');
 function renderResults(result){
   //append results to HMTL
   $('.js-results').prepend(
-                          //NEED TO MAKE THE THUMBNAILS CLICKABLE TO LINK TO YOUTUBE
     `<a href="https://www.youtube.com/watch?v=${result.id.videoId}">
         <img src="${result.snippet.thumbnails.medium.url}">
      </a>`);
@@ -40,6 +39,8 @@ function displaySearchData(data){
 function watchForSubmit(){
   $(".js-submit-search").on('click', function(){
       event.preventDefault();
+
+      $('.js-results').contents().remove();
 
       const query = $(this).prev().val();
       console.log($(this).prev().val());
