@@ -10,32 +10,39 @@ console.log('start of getDataFromAPI working');
     part: 'snippet',
     key: "AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg",
     q: `${searchTerm}`,
-    maxResults: 25,
+    maxResults: 6,
     type: 'video',
   };
   $.getJSON(youTube_url, querySettings, callback);
   console.log('end of getDataFromAPI working');
-  console.log($.getJSON(youTube_url, querySettings, callback));
+  console.log(`${searchTerm}`);
 }
 
 //render results
-/*function renderResults(result){
+function renderResults(result){
   //append results to HMTL
-  $('.js-results').append(`<video src="${result.items.snippet.thumbnails.medium.url}"></video>`);
-}*/
+  $('.js-results').prepend(
+    `<iframe
+         src="${result.snippet.thumbnails.medium.url}">
+    </iframe>`);
+  console.log(`${result.snippet.thumbnails.medium.url}`);
+}
 
 //display search data
-function displaySearchData(){
-
+function displaySearchData(data){
+  const results = data.items.map(function(item, index){
+    renderResults(item);
+  });
 }
 
 //watch for click on submit button
 function watchForSubmit(){
-  $(".js-submit-search").submit(function(){
+  $(".js-submit-search").on('click', function(){
       event.preventDefault();
 
-      const query = $(this).prev()
-      getDataFromAPI(query, needToChangeThis);
+      const query = $(this).prev().val();
+      console.log($(this).prev().val());
+      getDataFromAPI(query, displaySearchData);
   });
 }
 
