@@ -26,8 +26,32 @@ function renderResults(result){
     <h2>${result.snippet.title}</h2>
     <a href="https://www.youtube.com/watch?v=${result.id.videoId}">
         <img src="${result.snippet.thumbnails.medium.url}">
-     </a>`);
-  console.log(`${result.snippet.thumbnails.medium.url}`);
+    </a>`);
+}
+
+function getNextPageData(result){
+console.log('start of getNextPageData working');
+  const querySettings = {
+    pageToken: `${result.nextPageToken}`,
+    part: 'snippet',
+    key: "AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg",
+    q: `$(".js-query").val()`,
+    maxResults: 6,
+    type: 'video',
+  };
+
+  $.getJSON(youTube_url, querySettings);
+
+  console.log('end of getNextPageData working');
+}
+
+function renderPagination(result){
+  console.log('start of renderPagination working');
+  $('.js-pagination').append(
+    `<button type="submit" class="js-previous-button">Prev</button>
+     <button type="submit" class="js-next-button">Next</button>`
+  );
+  console.log('end of renderPagination work');
 }
 
 //display search data
@@ -35,10 +59,15 @@ function displaySearchData(data){
   const results = data.items.map(function(item, index){
     renderResults(item);
   });
+  getNextPageData(data);
+  renderPagination(data);
+
+  console.log('end of displaySearchData working');
 }
 
 //watch for click on submit button
 function watchForSubmit(){
+  console.log('start of watchForSubmit working');
   $(".js-submit-search").on('click', function(){
       event.preventDefault();
 
@@ -48,7 +77,14 @@ function watchForSubmit(){
       console.log($(this).prev().val());
       getDataFromAPI(query, displaySearchData);
   });
+  console.log('end of watchForSubmit working');
 }
+
+function watchForNextButton(){
+  //create event listener for click on next button
+  //when clicked clear old results and render new results
+}
+
 
 function docReady(){
   getDataFromAPI();
