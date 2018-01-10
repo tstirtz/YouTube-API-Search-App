@@ -8,7 +8,7 @@ console.log('start of getDataFromAPI working');
 
   const querySettings = {
     part: 'snippet',
-    key: "AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg",
+    key: 'AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg',
     q: `${searchTerm}`,
     maxResults: 6,
     type: 'video',
@@ -29,18 +29,20 @@ function renderResults(result){
     </a>`);
 }
 
-function getNextPageData(result){
+function getNextPageData(nextPgToken, callback){
 console.log('start of getNextPageData working');
   const querySettings = {
-    pageToken: `${result.nextPageToken}`,
     part: 'snippet',
-    key: "AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg",
-    q: `$(".js-query").val()`,
+    key: 'AIzaSyAgn_oFoGo-8EOWZ4yh-v_NCF3MuiziDPg',
+    q: `${$('.js-query').val()}`,
+    pageToken: `${nextPgToken}`,
     maxResults: 6,
     type: 'video',
   };
-
-  $.getJSON(youTube_url, querySettings);
+  console.log(`${nextPgToken}`);
+  console.log(`${$('.js-query').val()}`);
+  console.log(querySettings);
+  $.getJSON(youTube_url, querySettings, callback);
 
   console.log('end of getNextPageData working');
 }
@@ -56,10 +58,14 @@ function renderPagination(result){
 
 //display search data
 function displaySearchData(data){
+
   const results = data.items.map(function(item, index){
+    console.log('start of displaySearchData working');
     renderResults(item);
   });
-  getNextPageData(data);
+
+  const nextPage = data.nextPageToken;
+  watchForNextButton(nextPage);
   renderPagination(data);
 
   console.log('end of displaySearchData working');
@@ -80,14 +86,21 @@ function watchForSubmit(){
   console.log('end of watchForSubmit working');
 }
 
-function watchForNextButton(){
+function watchForNextButton(pgToken){
+    console.log('start of watchForNextButton working');
   //create event listener for click on next button
-  //when clicked clear old results and render new results
+  $('.js-pagination').on('click', '.js-next-button', function(){
+    event.preventDefault();
+    //when clicked clear old results and render new results
+    $('.js-results').contents().remove();
+    $('.js-pagination').contents().remove();
+
+    getNextPageData(pgToken, displaySearchData);
+  });
 }
 
 
 function docReady(){
-  getDataFromAPI();
   watchForSubmit();
 }
 
