@@ -21,11 +21,13 @@ console.log('start of getDataFromAPI working');
 //render results
 function renderResults(result){
   //append results to HMTL
-  $('.js-results').prepend(
+  $('.js-results').append(
     `
-    <h2>${result.snippet.title}</h2>
     <a href="https://www.youtube.com/watch?v=${result.id.videoId}">
-        <img src="${result.snippet.thumbnails.medium.url}">
+      <h2>${result.snippet.title}</h2>
+     </a>
+     <a href="https://www.youtube.com/watch?v=${result.id.videoId}">
+        <img src="${result.snippet.thumbnails.medium.url}" alt='${result.snippet.description}'/>
      </a>`);
   console.log(`${result.snippet.thumbnails.medium.url}`);
 }
@@ -35,6 +37,11 @@ function displaySearchData(data){
   const results = data.items.map(function(item, index){
     renderResults(item);
   });
+  const numberOfResults = data.items.length;
+
+  $('.js-results').prepend(`
+      <p aria-live="polite">Displaying ${numberOfResults} results</p>
+    `);
 }
 
 //watch for click on submit button
