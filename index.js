@@ -40,7 +40,7 @@ function displaySearchData(data){
   const numberOfResults = data.items.length;
 
   $('.js-results').prepend(`
-      <p aria-live="polite">Displaying ${numberOfResults} results</p>
+      <p aria-live="assertive">Displaying ${numberOfResults} results</p>
     `);
 }
 
